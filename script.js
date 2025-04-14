@@ -3,13 +3,9 @@ async function submitText() {
   const message = inputField.value.trim();
   if (!message) return;
 
-  // Add user message to chat
   addMessage(message, "user");
-
-  // Clear input
   inputField.value = "";
 
-  // Show typing animation
   addTypingIndicator();
 
   try {
@@ -21,13 +17,17 @@ async function submitText() {
       body: JSON.stringify({ question: message })
     });
 
-    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
 
+    const data = await response.json();
     removeTypingIndicator();
     addMessage(data.answer, "ai");
   } catch (error) {
     removeTypingIndicator();
-    addMessage("Error: Could not reach Tyaza backend.", "ai");
+    addMessage("Error: Ntitwashoboye kuvugana na Tyaza.", "ai");
+    console.error("Tyaza backend error:", error);
   }
 }
 
