@@ -113,5 +113,43 @@
       </div>
     </div>
   </div>
+
+  <script>
+    async function submitText() {
+      const userInput = document.getElementById('user-input').value;
+      if (!userInput) return;
+
+      // Add user message to chat history
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('message', 'user-message');
+      userMessage.innerHTML = `<p>${userInput}</p>`;
+      document.getElementById('history').appendChild(userMessage);
+
+      // Send request to FastAPI backend
+      try {
+        const response = await fetch('http://127.0.0.1:8000/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ question: userInput }),
+        });
+
+        const data = await response.json();
+
+        // Display AI response
+        const aiMessage = document.createElement('div');
+        aiMessage.classList.add('message', 'ai-message');
+        aiMessage.innerHTML = `<p>${data.answer}</p>`;
+        document.getElementById('history').appendChild(aiMessage);
+
+        // Clear input field
+        document.getElementById('user-input').value = '';
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Sorry, something went wrong. Please try again later.');
+      }
+    }
+  </script>
 </body>
 </html>
