@@ -1,18 +1,30 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from deepseek_model import get_answer
-from flask_cors import CORS
+from fastapi.middleware.cors import CORSMiddleware
 
-app = Flask(__name__)
-CORS(app)  # Allow frontend to access this backend
+# Initialize FastAPI app
+app = FastAPI()
 
-@app.route('/ask', methods=['POST'])
-def ask_tyaza():
-    data = request.get_json()
-    question = data.get('question', '')
+# Allow frontend to access this backend (CORS)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this for specific allowed origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
+
+# Create a Pydantic model for the incoming request
+class QuestionRequest(BaseModel):
+    question: str
+
+@app.post('/ask')
+async def ask_tyaza(data: QuestionRequest):
+    question = data.question
     if not question:
-        return jsonify({'answer': "Please ask something."}), 400
+        raise HTTPException(status_code=400, detail="Please ask something.")
     answer = get_answer(question)
-    return jsonify({'answer': answer})
+    return {"answer": answer}
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Run the app using 'uvicorn' (instead of Flask's built-in server)
