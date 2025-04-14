@@ -1,63 +1,66 @@
-async function submitText() {
+document.addEventListener("DOMContentLoaded", () => {
+  const chatHistory = document.querySelector(".chat-history");
   const inputField = document.getElementById("user-input");
-  const message = inputField.value.trim();
-  if (!message) return;
+  const sendBtn = document.querySelector(".send-btn");
+  const moodSelector = document.querySelector(".mood-selector");
 
-  addMessage(message, "user");
-  inputField.value = "";
+  // Handle sending messages
+  function sendMessage() {
+    const message = inputField.value.trim();
+    if (message === "") return;
 
-  addTypingIndicator();
+    appendMessage("user", message);
+    inputField.value = "";
+    inputField.style.height = "auto";
 
-  try {
-    const response = await fetch("https://your-backend-url.onrender.com/ask", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ question: message })
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-    removeTypingIndicator();
-    addMessage(data.answer, "ai");
-  } catch (error) {
-    removeTypingIndicator();
-    addMessage("Error: Ntitwashoboye kuvugana na Tyaza.", "ai");
-    console.error("Tyaza backend error:", error);
+    // Simulated AI response (Replace this with your real AI call)
+    setTimeout(() => {
+      appendMessage("ai", "Ndumva neza ibyo uvuga! 😊");
+    }, 800);
   }
-}
 
-function addMessage(text, sender) {
-  const history = document.getElementById("history");
-  const msg = document.createElement("div");
-  msg.className = `message ${sender}-message`;
-  msg.innerText = text;
-  history.appendChild(msg);
-  history.scrollTop = history.scrollHeight;
-}
+  // Create and append a message to chat
+  function appendMessage(sender, text) {
+    const messageDiv = document.createElement("div");
+    messageDiv.classList.add("message");
+    messageDiv.classList.add(sender === "user" ? "user-message" : "ai-message");
+    messageDiv.textContent = text;
 
-function addTypingIndicator() {
-  const history = document.getElementById("history");
-  const typing = document.createElement("div");
-  typing.className = "typing-indicator ai-message";
-  typing.id = "typing";
-  typing.innerHTML = `
-    <div class="typing-text">Tyaza aratekereza...</div>
-    <div class="typing-dots">
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-    </div>
-  `;
-  history.appendChild(typing);
-  history.scrollTop = history.scrollHeight;
-}
+    chatHistory.appendChild(messageDiv);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+  }
 
-function removeTypingIndicator() {
-  const typing = document.getElementById("typing");
-  if (typing) typing.remove();
-}
+  // Auto resize textarea
+  inputField.addEventListener("input", () => {
+    inputField.style.height = "auto";
+    inputField.style.height = inputField.scrollHeight + "px";
+  });
+
+  // Send on button click
+  sendBtn.addEventListener("click", sendMessage);
+
+  // Send on Enter key
+  inputField.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Toggle mood selector
+  document.querySelector(".mood-btn")?.addEventListener("click", () => {
+    moodSelector.classList.toggle("active");
+  });
+
+  // Star twinkle generator (optional eye-candy)
+  const bg = document.querySelector(".cosmic-bg");
+  for (let i = 0; i < 100; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.width = star.style.height = `${Math.random() * 2 + 1}px`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.animationDuration = `${Math.random() * 5 + 5}s`;
+    bg.appendChild(star);
+  }
+});
