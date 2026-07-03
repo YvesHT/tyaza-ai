@@ -738,25 +738,6 @@ body {
   50% { opacity: 0.6; transform: scale(1.2); }
 }
 
-.puter-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.55rem;
-  padding: 2px 8px;
-  background: rgba(167, 139, 250, 0.15);
-  border: 1px solid rgba(167, 139, 250, 0.2);
-  border-radius: var(--radius-full);
-  color: var(--primary);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.puter-badge i {
-  font-size: 0.5rem;
-}
-
 .risk-indicators {
   display: none;
   gap: 4px;
@@ -1129,17 +1110,6 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
   font-weight: 500;
-}
-
-.msg-metadata-item.puter-ai {
-  color: var(--primary);
-  border-color: rgba(167, 139, 250, 0.2);
-  background: rgba(167, 139, 250, 0.08);
-}
-
-.msg-metadata-item.local-ai {
-  color: var(--text-tertiary);
-  border-color: var(--glass-border);
 }
 
 .msg-metadata-item.confidence-high { color: var(--success); }
@@ -2175,8 +2145,8 @@ body {
         </div>
       </div>
       <div class="header-actions">
-        <span class="puter-badge" id="puterStatus"><i class="fas fa-brain"></i> Puter AI</span>
         <div class="risk-indicators" id="riskIndicators"></div>
+        <button class="btn btn-primary btn-sm" id="aiToggleBtn"><i class="fas fa-brain"></i> AI</button>
         <button class="btn btn-icon btn-ghost" id="exportBtn" title="Export"><i class="fas fa-download"></i></button>
         <button class="btn btn-icon btn-ghost" id="clearChatBtn" title="Clear"><i class="fas fa-trash-alt"></i></button>
       </div>
@@ -2201,9 +2171,6 @@ body {
         </div>
         <div id="welcomeGreeting" style="font-size:0.95rem;color:var(--secondary);opacity:0;transition:opacity 0.8s;font-weight:600;">
           ✨ Murakaza neza
-        </div>
-        <div style="font-size:0.65rem;color:var(--text-muted);margin-top:4px;background:var(--glass);padding:4px 12px;border-radius:var(--radius-full);border:1px solid var(--glass-border);">
-          <i class="fas fa-brain" style="color:var(--primary);"></i> Powered by Puter AI
         </div>
       </div>
     </div>
@@ -2329,7 +2296,7 @@ body {
 
 <script>
 // ============================================================
-// TYAZA v5.0 - PUTER AI DEFAULT
+// TYAZA v5.0 - ULTRA-REALISTIC RESPONSES + PUTER AI PRIMARY
 // ============================================================
 
 const TYAZA_MISSION = {
@@ -2785,6 +2752,7 @@ class UltraMarkdownParser {
           block.startsWith('<blockquote') || block.startsWith('<div class="code-block')) {
         return block;
       }
+      // Don't wrap if already wrapped
       if (block.startsWith('<p>')) return block;
       return `<p>${block.replace(/\n/g, '<br>')}</p>`;
     }).join('\n');
@@ -2806,7 +2774,7 @@ class UltraMarkdownParser {
 }
 
 // ============================================================
-// AI RESPONSE FORMATTER
+// AI RESPONSE FORMATTER (Ultra-realistic)
 // ============================================================
 class AIResponseFormatter {
   constructor() {
@@ -3229,7 +3197,7 @@ function detectEmotion(text) {
 }
 
 // ============================================================
-// LOCAL RESPONSE GENERATOR (FALLBACK)
+// LOCAL RESPONSE GENERATOR
 // ============================================================
 function generateResponse(userInput) {
   const detection = detectEmotion(userInput);
@@ -3515,6 +3483,7 @@ function streamText(element, html, speed = 8) {
     tempDiv.innerHTML = html;
     const fullText = tempDiv.textContent || tempDiv.innerText;
     
+    // For simplicity, we reveal the HTML progressively
     element.innerHTML = '';
     let i = 0;
     const chunkSize = 3;
@@ -3525,7 +3494,9 @@ function streamText(element, html, speed = 8) {
         resolve();
         return;
       }
+      // Find safe cut point (not inside a tag)
       let cutPoint = Math.min(i + chunkSize, html.length);
+      // If we're in the middle of a tag, extend to the end of it
       const partial = html.substring(0, cutPoint);
       const openTags = (partial.match(/</g) || []).length;
       const closeTags = (partial.match(/>/g) || []).length;
@@ -3547,22 +3518,18 @@ function streamText(element, html, speed = 8) {
 // Build metadata HTML
 function buildMetadataHTML(metadata) {
   if (!metadata) return '';
-  
   const confidenceClass = metadata.confidence >= 0.85 ? 'confidence-high' : 
                           metadata.confidence >= 0.7 ? 'confidence-medium' : 'confidence-low';
-  
-  const isPuter = metadata.model === 'puter';
-  const modelClass = isPuter ? 'puter-ai' : 'local-ai';
-  const modelIcon = isPuter ? 'brain' : 'microchip';
-  const modelLabel = isPuter ? 'Puter AI' : 'Local';
+  const confidenceLabel = metadata.confidence >= 0.85 ? 'High' : 
+                          metadata.confidence >= 0.7 ? 'Medium' : 'Low';
   
   return `
     <div class="msg-metadata">
       <span class="msg-metadata-item ${confidenceClass}">
         <i class="fas fa-bullseye"></i> ${Math.round(metadata.confidence * 100)}%
       </span>
-      <span class="msg-metadata-item ${modelClass}">
-        <i class="fas fa-${modelIcon}"></i> ${modelLabel}
+      <span class="msg-metadata-item">
+        <i class="fas fa-${metadata.model === 'puter' ? 'brain' : 'microchip'}"></i> ${metadata.model === 'puter' ? 'Puter AI' : 'Local'}
       </span>
       ${metadata.responseTime ? `
       <span class="msg-metadata-item">
@@ -3630,19 +3597,6 @@ function addMessage(role, content, htmlContent = null, metadata = null) {
 // ============================================================
 // PUTER AI - PRIMARY RESPONSE GENERATOR
 // ============================================================
-async function getPuterAIWithRetry(text, maxRetries = 2) {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const result = await getPuterAIResponse(text);
-      if (result) return result;
-    } catch (e) {
-      console.warn(`Puter AI retry ${i + 1}/${maxRetries}:`, e);
-      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
-    }
-  }
-  return null;
-}
-
 async function getPuterAIResponse(userInput) {
   const startTime = performance.now();
   
@@ -3652,7 +3606,10 @@ async function getPuterAIResponse(userInput) {
     }
     
     const detection = detectEmotion(userInput);
-    let emotionContext = detection?.type ? `Umukoresha arumva: ${detection.type}.` : '';
+    let emotionContext = '';
+    if (detection && detection.type !== 'name') {
+      emotionContext = `Umukoresha arumva: ${detection.type}.`;
+    }
     
     const lang = state.detectedLanguage || 'rw';
     const langInstruction = lang === 'rw' ? 
@@ -3660,90 +3617,87 @@ async function getPuterAIResponse(userInput) {
       lang === 'fr' ? 'Répondez en Français, avec empathie et chaleur.' :
       'Respond in English, with empathy and warmth.';
     
-    const recentMessages = state.messages.slice(-8).map(m => ({
+    const rareWordsList = Object.keys(TYAZA_DATASET.rareWords).slice(0, 30).join(', ');
+    const proverbsList = Object.keys(TYAZA_DATASET.proverbs).slice(0, 20).join(', ');
+    
+    // Build conversation history for context
+    const recentMessages = state.messages.slice(-6).map(m => ({
       role: m.role,
       content: m.content
     }));
     
-    const profile = getUserProfile();
-    const userContext = `
-${state.userName ? `Umukoresha: ${state.userName}` : ''}
-Amateka y'amarangamutima: ${profile.avgMood > 0 ? `${profile.avgMood.toFixed(1)}/5` : 'Nta data'}
-Ibikorwa byakozwe: ${profile.sessionCount}
-`;
-    
-    const systemPrompt = `Uri TYAZA, umuvugizi w'umutima ukora muri KIVURA LABS mu Rwanda.
-
+    const systemContext = `Uri TYAZA, umuvugizi w'umutima ukora muri KIVURA LABS mu Rwanda.
 ${emotionContext}
 ${langInstruction}
 
-## ═══ KIVURA LABS ═══
-- CEO & Founder: Yves Hirwa Tuyishime
-- Tagline: "Healthy citizens, wealthy nation"
+PERSONALITY:
+- Ufite impuhwe zikomeye, uri umunyabwenge, kandi wita ku muntu
+- Ukoresha ikinyarwanda kiboneye, gishyuha
+- Ntutange inama z'ubuvuzi - ahubwo uyobora umuntu ku bafasha
+- Ukoresha imigani n'amagambo adasanzwe y'umuco nyarwanda
+- Usubiza mu buryo bwumvikana, butuje, kandi bufasha
+
+IBANZE - KIVURA LABS:
+- Yashinzwe na Yves Hirwa Tuyishime (CEO & Founder)
+- Ijambo rye: "Healthy citizens, wealthy nation"
 - Product: TYAZA - AI ivuga mu Kinyarwanda
-- Yashinzwe: 2024, Rwanda
+- Yashinzwe mu 2024 mu Rwanda
+- Tagline: "${TYAZA_MISSION.tagline}"
 
-## ═══ TYAZA MISSION ═══
-${TYAZA_MISSION.mission}
-${TYAZA_MISSION.tagline}
+MISSION: ${TYAZA_MISSION.mission}
+VISION: ${TYAZA_MISSION.vision}
+VALUES: ${TYAZA_MISSION.values.join(', ')}
 
-## ═══ USER CONTEXT ═══
-${userContext}
+IMIGANI UZIKO: ${proverbsList}
+AMAGAMBO ADASANSWE: ${rareWordsList}
 
-## ═══ RULES ═══
-1. ✅ Jya usubiza mu Kinyarwanda (cyangwa ururimi rw'umukoresha)
-2. ✅ Koresha imigani ya Kinyarwanda n'iby'umuco
-3. ✅ Ntugire inama z'ubuvuzi - yobora ku bafasha
-4. ✅ Ube umunyabwenge, ufite impuhwe, kandi wumva
-5. ✅ Koresha markdown: **bold**, *italic*, - lists, > quotes
-6. ❌ NTA "having" cyangwa "havings" mu bisubizo
-7. ❌ NTA gusubiza mu buryo bwarebire cyane
-8. ❌ NTA kuvuga ko uri umuntu - uri AI ya KIVURA LABS
+${state.userName ? `Izina ry'umukoresha ni ${state.userName}.` : ''}
 
-## ═══ STYLE ═══
-- Subiza nk'umunyarwanda w'umunyabwenge, utuje, ufite ubushishozi
-- Koresha iby'umuco nyarwanda
-- Urugero rw'umugani: "Ijoro ribara uwariraye" - abariraye ni bo bumva iby'ijoro
-
-## ═══ RARE WORDS ═══
-Sobanura amagambo akoreshwa mu Kinyarwanda gikomeye:
-Urwangano, Ubwirasi, Ubugugu, Ubusambo bw'umutima, Indyamirizi, Ubupfura, Umunyamahane
-
-Ubu ni iki uri bumva?`;
+INTEKO:
+- Ntukavuge ko uri umuntu - uri AI ya KIVURA LABS
+- Ntukoreshe ijambo "having" mu bisubizo byawe
+- Sobanura amagambo adasanzwe ukoresha
+- Koresha imigani nk'ubuhanga bw'umuco nyarwanda
+- Subiza mu buryo bw'umwimerere, nk'uko umuntu w'ukuri yavuga
+- Koresha markdown: **bold**, *italic*, - lists, > quotes
+- Subiza mu buryo bugufi kandi bufite ishingiro (nturemere cyane)`;
 
     const messages = [
-      { role: 'system', content: systemPrompt },
+      { role: 'system', content: systemContext },
       ...recentMessages,
       { role: 'user', content: userInput }
     ];
     
-    let response;
-    try {
-      response = await puter.ai.chat(messages, { 
-        model: 'claude-sonnet-4'
-      });
-    } catch (e) {
-      console.warn('Claude fallback, trying GPT-4:', e);
-      response = await puter.ai.chat(messages, { 
-        model: 'gpt-4' 
-      });
-    }
-    
+    const response = await puter.ai.chat(messages, { model: 'claude-sonnet-4' });
     let text = response.message?.content || response.text || '';
     
+    if (!text || text.length < 3) {
+      throw new Error('Empty response');
+    }
+    
+    // Clean up forbidden words
     text = text.replace(/\bhaving\b/gi, '').replace(/\bhavings\b/gi, '');
     text = text.replace(/\s{2,}/g, ' ').trim();
     
+    // Parse markdown to HTML
     const html = UltraMarkdownParser.parse(text);
+    
+    // Calculate metadata
+    const responseTime = Math.round(performance.now() - startTime);
+    const tokens = text.split(/\s+/).length;
+    const confidence = detection ? 
+      (detection.type === 'crisis' ? 0.95 : 
+       detection.type === 'greeting' ? 0.92 : 0.85) : 0.78;
+    const emotion = detection?.type || 'neutral';
     
     return {
       text: text,
       html: html,
       metadata: {
-        confidence: 0.92,
-        emotion: detection?.type || 'neutral',
-        responseTime: Math.round(performance.now() - startTime),
-        tokens: text.split(/\s+/).length,
+        confidence: confidence,
+        emotion: emotion,
+        responseTime: responseTime,
+        tokens: tokens,
         model: 'puter'
       }
     };
@@ -3754,7 +3708,7 @@ Ubu ni iki uri bumva?`;
 }
 
 // ============================================================
-// SEND MESSAGE WITH PUTER AI (DEFAULT)
+// SEND MESSAGE WITH AI
 // ============================================================
 async function sendMessage() {
   const input = document.getElementById('messageInput');
@@ -3765,16 +3719,17 @@ async function sendMessage() {
   input.style.height = 'auto';
   document.getElementById('sendBtn').disabled = true;
   
+  // Detect language
   state.detectedLanguage = detectLanguage(text);
   updateWelcome();
   
+  // Analyze risks
   const risks = analyzeRisks(text);
   state.riskFlags = risks;
   updateRiskIndicators(risks);
   
+  // Check for crisis first - always use local response for safety
   const detection = detectEmotion(text);
-  
-  // CRISIS: Always use local response for safety
   if (detection && detection.type === 'crisis') {
     const result = generateResponse(text);
     addMessage('user', text);
@@ -3784,7 +3739,7 @@ async function sendMessage() {
     return;
   }
   
-  // NAME: Handle locally
+  // Handle name detection locally
   if (detection && detection.type === 'name') {
     const result = generateResponse(text);
     if (result.userName) {
@@ -3800,28 +3755,29 @@ async function sendMessage() {
     return;
   }
   
+  // Add user message
   addMessage('user', text);
   
+  // Show typing
   const typingId = showTyping();
   state.isGenerating = true;
   document.getElementById('statusText').textContent = 'TYAZA irategura...';
   
-  let result = null;
+  let result;
   
-  // PRIMARY: Try Puter AI first (ALWAYS)
-  if (typeof puter !== 'undefined' && state.useAI) {
-    result = await getPuterAIWithRetry(text, 2);
+  // Try Puter AI first
+  if (state.useAI && typeof puter !== 'undefined') {
+    result = await getPuterAIResponse(text);
   }
   
-  // FALLBACK: Only if Puter fails
+  // Fallback to local
   if (!result) {
-    console.warn('⚠️ Puter AI failed, using local fallback');
     result = generateResponse(text);
-    showToast('⚠️ Using offline mode', 'warning');
   }
   
   removeTyping(typingId);
   
+  // Stream the response
   await addMessageWithStream('assistant', result.text || result.markdown, result.html, result.metadata);
   
   state.isGenerating = false;
@@ -3867,6 +3823,8 @@ async function addMessageWithStream(role, content, htmlContent, metadata) {
   document.getElementById('messages').appendChild(msg);
   
   const bubble = msg.querySelector('.msg-bubble');
+  
+  // Stream the text
   await streamText(bubble, displayContent, 6);
   
   state.messages.push({ 
@@ -4350,6 +4308,7 @@ function initNeuralBackground() {
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+    // Update nodes
     nodes.forEach(node => {
       node.x += node.vx;
       node.y += node.vy;
@@ -4357,6 +4316,7 @@ function initNeuralBackground() {
       if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
     });
     
+    // Draw connections
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
         const dx = nodes[i].x - nodes[j].x;
@@ -4374,6 +4334,7 @@ function initNeuralBackground() {
       }
     }
     
+    // Draw nodes
     nodes.forEach(node => {
       ctx.fillStyle = 'rgba(167, 139, 250, 0.6)';
       ctx.beginPath();
@@ -4407,19 +4368,13 @@ function initStars() {
 // INIT
 // ============================================================
 function init() {
-  // Force Puter AI as default
-  state.useAI = true;
-  
-  // Check Puter availability
   if (typeof puter !== 'undefined') {
     state.puterReady = true;
-    console.log('✅ TYAZA using Puter AI (default)');
-    document.getElementById('puterStatus').innerHTML = '<i class="fas fa-brain"></i> Puter AI';
-    showToast('🧠 TYAZA powered by Puter AI', 'success');
+    console.log('✅ TYAZA yiteguye na Puter AI!');
+    showToast('✅ TYAZA yiteguye na Puter AI ✨', 'success');
   } else {
-    console.warn('⚠️ Puter SDK not loaded - using fallback');
-    document.getElementById('puterStatus').innerHTML = '<i class="fas fa-microchip"></i> Local';
-    showToast('⚠️ Puter AI unavailable, using local mode', 'warning');
+    console.warn('⚠️ Puter SDK not loaded');
+    showToast('⚠️ TYAZA ikora mu buryo bwa gahunda', 'warning');
     state.useAI = false;
   }
   
@@ -4436,6 +4391,11 @@ function init() {
   renderHistory();
   updateMemoryStats();
   updateWelcome();
+  
+  const aiBtn = document.getElementById('aiToggleBtn');
+  aiBtn.innerHTML = state.useAI ? '<i class="fas fa-brain"></i> AI' : '<i class="fas fa-microchip"></i> Gahunda';
+  aiBtn.classList.toggle('btn-primary', state.useAI);
+  aiBtn.classList.toggle('btn-secondary', !state.useAI);
   
   document.getElementById('sendBtn').disabled = false;
   document.getElementById('messageInput').addEventListener('input', handleInput);
@@ -4463,6 +4423,14 @@ function init() {
   });
   document.getElementById('pitchSlider').addEventListener('change', () => storageSet('settings', state.settings));
   document.getElementById('micTestBtn').addEventListener('click', testMic);
+  document.getElementById('aiToggleBtn').addEventListener('click', () => {
+    state.useAI = !state.useAI;
+    const btn = document.getElementById('aiToggleBtn');
+    btn.innerHTML = state.useAI ? '<i class="fas fa-brain"></i> AI' : '<i class="fas fa-microchip"></i> Gahunda';
+    btn.classList.toggle('btn-primary', state.useAI);
+    btn.classList.toggle('btn-secondary', !state.useAI);
+    showToast(state.useAI ? 'Puter AI ikoreshwa ✨' : 'Gahunda ikoreshwa', 'info');
+  });
   document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
   document.getElementById('sidebarClose').addEventListener('click', closeSidebar);
   document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
@@ -4530,22 +4498,23 @@ function init() {
     }
   });
   
+  // Initialize visual effects
   initStars();
   initNeuralBackground();
   
   setTimeout(() => document.getElementById('messageInput').focus(), 500);
   
-  console.log('✨ TYAZA v5.0 - Puter AI Default');
+  console.log('✨ TYAZA v5.0 - Ultra-Realistic + Puter AI Primary');
   console.log('🏢 KIVURA LABS - "Healthy citizens, wealthy nation"');
   console.log('👤 CEO & Founder: Yves Hirwa Tuyishime');
-  console.log('🤖 Puter AI: PRIMARY (Claude Sonnet 4 + GPT-4 fallback)');
+  console.log('🤖 Puter AI: PRIMARY (with Claude Sonnet 4)');
   console.log('📚 Rare Words:', Object.keys(TYAZA_DATASET.rareWords).length);
   console.log('📖 Proverbs:', Object.keys(TYAZA_DATASET.proverbs).length);
   console.log('🌍 Rwanda, 2026');
 }
 
 // ============================================================
-// GLOBAL EXPORTS
+// GLOBAL
 // ============================================================
 window.TYAZA_DATASET = TYAZA_DATASET;
 window.COMPANY_INFO = COMPANY_INFO;
@@ -4573,7 +4542,6 @@ window.showProfileModal = showProfileModal;
 window.generateResponse = generateResponse;
 window.detectEmotion = detectEmotion;
 window.detectLanguage = detectLanguage;
-window.getPuterAIResponse = getPuterAIResponse;
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
