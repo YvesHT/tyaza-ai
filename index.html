@@ -93,7 +93,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 0;
-  pointer-events: none;
+  pointer-events: none !important;
   overflow: hidden;
 }
 
@@ -101,6 +101,7 @@ body {
   width: 100%;
   height: 100%;
   opacity: 0.35;
+  pointer-events: none !important;
 }
 
 .aurora-blob {
@@ -109,6 +110,7 @@ body {
   filter: blur(100px);
   opacity: 0.35;
   animation: auroraFloat 25s ease-in-out infinite;
+  pointer-events: none !important;
 }
 
 .aurora-blob:nth-child(1) {
@@ -148,7 +150,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 0;
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
 .star {
@@ -166,7 +168,7 @@ body {
 }
 
 /* ============================================
-   APP LAYOUT
+   APP LAYOUT - FIXED Z-INDEX
    ============================================ */
 .app {
   display: flex;
@@ -177,6 +179,7 @@ body {
   position: relative;
   overflow: hidden;
   z-index: 1;
+  pointer-events: auto !important;
 }
 
 /* ============================================
@@ -196,7 +199,7 @@ body {
   z-index: 20;
   transition: transform 0.4s var(--ease-spring);
   flex-shrink: 0;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .sidebar-header {
@@ -291,10 +294,11 @@ body {
   backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
   color: var(--text-secondary);
-  cursor: pointer;
+  cursor: pointer !important;
   align-items: center;
   justify-content: center;
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: auto !important;
 }
 
 .sidebar-close:hover { 
@@ -339,10 +343,11 @@ body {
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 600;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-spring);
   position: relative;
   overflow: hidden;
+  pointer-events: auto !important;
 }
 
 .new-chat-btn::before {
@@ -409,11 +414,12 @@ body {
   border: 1px solid var(--glass-border);
   color: var(--text-secondary);
   font-size: 1.05rem;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-spring);
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto !important;
 }
 
 .mood-btn-small:hover {
@@ -460,7 +466,8 @@ body {
   background: var(--surface-3);
   border-radius: var(--radius-full);
   outline: none;
-  cursor: pointer;
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 .slider::-webkit-slider-thumb {
@@ -469,7 +476,7 @@ body {
   height: 14px;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   border-radius: 50%;
-  cursor: pointer;
+  cursor: pointer !important;
   box-shadow: 0 2px 10px rgba(167, 139, 250, 0.4);
   transition: all 0.3s var(--ease-spring);
 }
@@ -487,11 +494,12 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   outline: none;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-smooth);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
+  pointer-events: auto !important;
 }
 
 .select:hover { border-color: var(--primary); }
@@ -530,8 +538,9 @@ body {
   background: var(--glass);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: auto !important;
 }
 
 .history-item:hover {
@@ -636,7 +645,7 @@ body {
   position: relative;
   background: var(--bg-deep);
   z-index: 1;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .chat-header {
@@ -670,9 +679,10 @@ body {
   backdrop-filter: blur(10px);
   color: var(--text-secondary);
   font-size: 1rem;
-  cursor: pointer;
+  cursor: pointer !important;
   border-radius: var(--radius-md);
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: auto !important;
 }
 
 .menu-toggle:hover { 
@@ -789,11 +799,11 @@ body {
   font-weight: 600;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-spring);
   position: relative;
   overflow: hidden;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .btn::before {
@@ -875,6 +885,7 @@ body {
   gap: 16px;
   position: relative;
   z-index: 1;
+  pointer-events: auto !important;
 }
 
 .welcome {
@@ -999,9 +1010,9 @@ body {
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 500;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-spring);
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .suggestion-btn:hover {
@@ -1153,12 +1164,13 @@ body {
   background: var(--glass);
   backdrop-filter: blur(10px);
   color: var(--text-tertiary);
-  cursor: pointer;
+  cursor: pointer !important;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.65rem;
   transition: all 0.3s var(--ease-spring);
+  pointer-events: auto !important;
 }
 
 .msg-action:hover { 
@@ -1246,6 +1258,7 @@ body {
   flex-shrink: 0;
   position: relative;
   z-index: 2;
+  pointer-events: auto !important;
 }
 
 .input-container {
@@ -1261,6 +1274,7 @@ body {
   gap: 8px;
   transition: all 0.3s var(--ease-smooth);
   box-shadow: var(--shadow-lg);
+  pointer-events: auto !important;
 }
 
 .input-container:focus-within {
@@ -1282,6 +1296,7 @@ body {
   max-height: 120px;
   min-height: 20px;
   line-height: 1.5;
+  pointer-events: auto !important;
 }
 
 .input-container textarea::placeholder { 
@@ -1301,12 +1316,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-spring);
   border: none;
   font-size: 0.95rem;
   position: relative;
   overflow: hidden;
+  pointer-events: auto !important;
 }
 
 .input-btn::before {
@@ -1357,7 +1373,7 @@ body {
 
 .send-btn:disabled { 
   opacity: 0.4; 
-  cursor: not-allowed; 
+  cursor: not-allowed !important; 
   transform: none !important;
 }
 
@@ -1386,14 +1402,14 @@ body {
   color: var(--text-secondary);
   font-size: 0.75rem;
   font-weight: 500;
-  cursor: pointer;
+  cursor: pointer !important;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
   transition: all 0.3s var(--ease-smooth);
   z-index: 40;
   box-shadow: var(--shadow-md);
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .scroll-bottom.visible { 
@@ -1419,13 +1435,13 @@ body {
   background: linear-gradient(135deg, var(--error), #dc2626);
   color: white;
   border: none;
-  cursor: pointer;
+  cursor: pointer !important;
   font-size: 1.2rem;
   box-shadow: 0 6px 24px rgba(239, 68, 68, 0.35);
   z-index: 100;
   transition: all 0.3s var(--ease-spring);
   animation: crisisFloat 3s ease-in-out infinite;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .crisis-btn:hover { 
@@ -1469,9 +1485,14 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: none !important;
 }
 
-.modal-backdrop.active { opacity: 1; visibility: visible; }
+.modal-backdrop.active { 
+  opacity: 1; 
+  visibility: visible;
+  pointer-events: auto !important;
+}
 
 .modal {
   background: var(--surface-2);
@@ -1486,7 +1507,7 @@ body {
   transition: transform 0.4s var(--ease-spring);
   width: 100%;
   box-shadow: var(--shadow-lg);
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .modal-backdrop.active .modal { transform: scale(1); }
@@ -1516,10 +1537,11 @@ body {
   backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   color: var(--text-tertiary);
-  cursor: pointer;
+  cursor: pointer !important;
   border-radius: var(--radius-md);
   font-size: 1.2rem;
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: auto !important;
 }
 
 .modal-close:hover { 
@@ -1547,9 +1569,10 @@ body {
   background: var(--glass);
   border: 2px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s var(--ease-spring);
   min-width: 50px;
+  pointer-events: auto !important;
 }
 
 .mood-btn:hover { 
@@ -1584,6 +1607,7 @@ body {
   min-height: 80px;
   margin-bottom: 14px;
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: auto !important;
 }
 
 .mood-notes:focus { 
@@ -1703,6 +1727,8 @@ body {
   transition: all 0.3s var(--ease-spring);
   flex-shrink: 0;
   box-shadow: 0 3px 12px rgba(239, 68, 68, 0.25);
+  cursor: pointer !important;
+  pointer-events: auto !important;
 }
 
 .crisis-resource .crisis-call:hover { 
@@ -1720,6 +1746,7 @@ body {
   flex-direction: column;
   gap: 8px;
   max-width: 90vw;
+  pointer-events: none !important;
 }
 
 .toast {
@@ -1734,6 +1761,7 @@ body {
   max-width: 320px;
   font-weight: 500;
   font-size: 0.8rem;
+  pointer-events: auto !important;
 }
 
 @keyframes toastIn {
@@ -1757,6 +1785,7 @@ body {
   justify-content: center;
   z-index: 600;
   animation: fadeUp 0.3s var(--ease-spring);
+  pointer-events: auto !important;
 }
 
 .voice-dialog-content {
@@ -1768,7 +1797,7 @@ body {
   max-width: 90vw;
   width: 380px;
   box-shadow: var(--shadow-lg);
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 .voice-dialog-content h3 {
@@ -1789,6 +1818,7 @@ body {
   font-size: 0.95rem;
   margin-bottom: 12px;
   transition: all 0.3s var(--ease-smooth);
+  pointer-events: auto !important;
 }
 
 .voice-dialog-content input:focus { 
@@ -1807,17 +1837,17 @@ body {
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s var(--ease-smooth);
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
 .sidebar-overlay.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 /* ============================================
-   CONTENT STYLING - Ultra-realistic
+   CONTENT STYLING
    ============================================ */
 .proverb-box {
   background: rgba(167, 139, 250, 0.08);
@@ -1953,14 +1983,14 @@ body {
     transform: translateX(-100%);
     z-index: 500;
     box-shadow: 8px 0 48px rgba(0, 0, 0, 0.8);
-    pointer-events: none;
+    pointer-events: none !important;
     transition: transform 0.4s var(--ease-spring), pointer-events 0s 0.4s;
     width: 280px;
   }
 
   .sidebar.open {
     transform: translateX(0);
-    pointer-events: auto;
+    pointer-events: auto !important;
     transition: transform 0.4s var(--ease-spring), pointer-events 0s 0s;
   }
 
@@ -2948,7 +2978,7 @@ let state = {
   moodData: [],
   conversations: [],
   isListening: false,
-  useAI: true, // Always use AI by default
+  useAI: true,
   speechRecognition: null,
   speechSynthesis: window.speechSynthesis,
   voices: [],
@@ -2994,10 +3024,11 @@ function storageClear(key) { storageSet(key, []); }
 // TOAST
 // ============================================================
 function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.innerHTML = `<span>${message}</span>`;
-  document.getElementById('toastContainer').appendChild(toast);
+  container.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
 
@@ -3495,10 +3526,6 @@ function removeTyping(id) {
 // Streaming text effect
 function streamText(element, html, speed = 8) {
   return new Promise((resolve) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    const fullText = tempDiv.textContent || tempDiv.innerText;
-    
     element.innerHTML = '';
     let i = 0;
     const chunkSize = 3;
@@ -3533,8 +3560,6 @@ function buildMetadataHTML(metadata) {
   if (!metadata) return '';
   const confidenceClass = metadata.confidence >= 0.85 ? 'confidence-high' : 
                           metadata.confidence >= 0.7 ? 'confidence-medium' : 'confidence-low';
-  const confidenceLabel = metadata.confidence >= 0.85 ? 'High' : 
-                          metadata.confidence >= 0.7 ? 'Medium' : 'Low';
   
   return `
     <div class="msg-metadata">
@@ -3564,9 +3589,7 @@ function addMessage(role, content, htmlContent = null, metadata = null) {
   msg.className = `message ${role}`;
   const time = new Date().toLocaleTimeString('rw-RW', { hour: '2-digit', minute: '2-digit' });
   const displayContent = htmlContent || UltraMarkdownParser.parse(content);
-  const avatarContent = role === 'user' ?
-    '👤' :
-    `<span>🧠</span>`;
+  const avatarContent = role === 'user' ? '👤' : `<span>🧠</span>`;
   
   const metadataHTML = role === 'assistant' ? buildMetadataHTML(metadata) : '';
   
@@ -3776,7 +3799,6 @@ async function sendMessage() {
   // Fallback to local if Puter fails or is disabled
   if (!result) {
     result = generateResponse(text);
-    // If Puter failed but we wanted AI, show a toast
     if (state.useAI) {
       showToast('Puter AI yananiye, ndakoresha gahunda yanjye', 'warning');
     }
@@ -3800,9 +3822,7 @@ async function addMessageWithStream(role, content, htmlContent, metadata) {
   msg.className = `message ${role}`;
   const time = new Date().toLocaleTimeString('rw-RW', { hour: '2-digit', minute: '2-digit' });
   const displayContent = htmlContent || UltraMarkdownParser.parse(content);
-  const avatarContent = role === 'user' ?
-    '👤' :
-    `<span>🧠</span>`;
+  const avatarContent = role === 'user' ? '👤' : `<span>🧠</span>`;
   
   const metadataHTML = role === 'assistant' ? buildMetadataHTML(metadata) : '';
   
@@ -4403,12 +4423,15 @@ function init() {
   aiBtn.classList.toggle('btn-primary', state.useAI);
   aiBtn.classList.toggle('btn-secondary', !state.useAI);
   
-  // Event listeners - ALL BUTTONS
-  document.getElementById('sendBtn').addEventListener('click', sendMessage);
+  // Event listeners - ALL BUTTONS with direct click handlers
+  document.getElementById('sendBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    sendMessage();
+  });
   document.getElementById('sendBtn').disabled = false;
   
   document.getElementById('messageInput').addEventListener('input', handleInput);
-  document.getElementById('messageInput').addEventListener('keydown', (e) => {
+  document.getElementById('messageInput').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       const btn = document.getElementById('sendBtn');
@@ -4416,24 +4439,39 @@ function init() {
     }
   });
   
-  document.getElementById('voiceBtn').addEventListener('click', toggleVoice);
-  document.getElementById('voiceSelect').addEventListener('change', (e) => {
+  document.getElementById('voiceBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleVoice();
+  });
+  
+  document.getElementById('voiceSelect').addEventListener('change', function(e) {
     state.settings.voice = e.target.value;
     storageSet('settings', state.settings);
   });
-  document.getElementById('rateSlider').addEventListener('input', (e) => {
+  
+  document.getElementById('rateSlider').addEventListener('input', function(e) {
     document.getElementById('rateValue').textContent = e.target.value;
     state.settings.rate = parseFloat(e.target.value);
   });
-  document.getElementById('rateSlider').addEventListener('change', () => storageSet('settings', state.settings));
-  document.getElementById('pitchSlider').addEventListener('input', (e) => {
+  document.getElementById('rateSlider').addEventListener('change', function() {
+    storageSet('settings', state.settings);
+  });
+  
+  document.getElementById('pitchSlider').addEventListener('input', function(e) {
     document.getElementById('pitchValue').textContent = e.target.value;
     state.settings.pitch = parseFloat(e.target.value);
   });
-  document.getElementById('pitchSlider').addEventListener('change', () => storageSet('settings', state.settings));
-  document.getElementById('micTestBtn').addEventListener('click', testMic);
+  document.getElementById('pitchSlider').addEventListener('change', function() {
+    storageSet('settings', state.settings);
+  });
   
-  document.getElementById('aiToggleBtn').addEventListener('click', () => {
+  document.getElementById('micTestBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    testMic();
+  });
+  
+  document.getElementById('aiToggleBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
     state.useAI = !state.useAI;
     const btn = document.getElementById('aiToggleBtn');
     btn.innerHTML = state.useAI ? '<i class="fas fa-brain"></i> AI' : '<i class="fas fa-microchip"></i> Gahunda';
@@ -4442,69 +4480,134 @@ function init() {
     showToast(state.useAI ? 'Puter AI ikoreshwa ✨' : 'Gahunda ikoreshwa', 'info');
   });
   
-  document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
-  document.getElementById('sidebarClose').addEventListener('click', closeSidebar);
-  document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
-  document.getElementById('newChatBtn').addEventListener('click', newChat);
-  document.getElementById('clearChatBtn').addEventListener('click', () => {
+  document.getElementById('menuToggle').addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleSidebar();
+  });
+  
+  document.getElementById('sidebarClose').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeSidebar();
+  });
+  
+  document.getElementById('sidebarOverlay').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeSidebar();
+  });
+  
+  document.getElementById('newChatBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    newChat();
+  });
+  
+  document.getElementById('clearChatBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
     if (state.messages.length === 0) return;
     if (confirm('Hanagura iki kiganiro?')) newChat();
   });
-  document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
-  document.getElementById('exportBtn').addEventListener('click', exportChat);
-  document.getElementById('viewProfileBtn').addEventListener('click', showProfileModal);
   
-  document.getElementById('profileModalClose').addEventListener('click', () => {
+  document.getElementById('clearHistoryBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    clearHistory();
+  });
+  
+  document.getElementById('exportBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    exportChat();
+  });
+  
+  document.getElementById('viewProfileBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    showProfileModal();
+  });
+  
+  document.getElementById('profileModalClose').addEventListener('click', function(e) {
+    e.stopPropagation();
     document.getElementById('profileModal').classList.remove('active');
   });
-  document.getElementById('profileModal').addEventListener('click', (e) => {
+  
+  document.getElementById('profileModal').addEventListener('click', function(e) {
     if (e.target === document.getElementById('profileModal')) {
       document.getElementById('profileModal').classList.remove('active');
     }
   });
   
   document.getElementById('messages').addEventListener('scroll', handleScroll);
-  document.getElementById('scrollBottom').addEventListener('click', scrollToBottom);
   
-  document.querySelectorAll('.suggestion-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.getElementById('scrollBottom').addEventListener('click', function(e) {
+    e.stopPropagation();
+    scrollToBottom();
+  });
+  
+  document.querySelectorAll('.suggestion-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
       document.getElementById('messageInput').value = btn.dataset.prompt;
       handleInput();
       document.getElementById('messageInput').focus();
-      setTimeout(() => {
+      setTimeout(function() {
         if (document.getElementById('messageInput').value.trim()) sendMessage();
       }, 300);
     });
   });
   
-  document.getElementById('openMoodModal').addEventListener('click', openMoodModal);
-  document.getElementById('moodModalClose').addEventListener('click', closeMoodModal);
-  document.getElementById('moodModal').addEventListener('click', (e) => {
+  document.getElementById('openMoodModal').addEventListener('click', function(e) {
+    e.stopPropagation();
+    openMoodModal();
+  });
+  
+  document.getElementById('moodModalClose').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeMoodModal();
+  });
+  
+  document.getElementById('moodModal').addEventListener('click', function(e) {
     if (e.target === document.getElementById('moodModal')) closeMoodModal();
   });
   
-  document.querySelectorAll('#moodScale .mood-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('#moodScale .mood-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#moodScale .mood-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('#moodScale .mood-btn').forEach(function(b) {
+        b.classList.remove('selected');
+      });
       btn.classList.add('selected');
     });
   });
-  document.getElementById('saveMoodBtn').addEventListener('click', saveMood);
   
-  document.querySelectorAll('#moodQuick .mood-btn-small').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.getElementById('saveMoodBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    saveMood();
+  });
+  
+  document.querySelectorAll('#moodQuick .mood-btn-small').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
       quickMood(btn.dataset.mood);
     });
   });
   
-  document.getElementById('crisisBtn').addEventListener('click', showCrisisModal);
-  document.getElementById('crisisModalClose').addEventListener('click', closeCrisisModal);
-  document.getElementById('crisisLater').addEventListener('click', closeCrisisModal);
-  document.getElementById('crisisNow').addEventListener('click', () => {
+  document.getElementById('crisisBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    showCrisisModal();
+  });
+  
+  document.getElementById('crisisModalClose').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeCrisisModal();
+  });
+  
+  document.getElementById('crisisLater').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeCrisisModal();
+  });
+  
+  document.getElementById('crisisNow').addEventListener('click', function(e) {
+    e.stopPropagation();
     window.location.href = 'tel:116';
   });
   
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', function(e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       document.getElementById('messageInput').focus();
@@ -4521,7 +4624,9 @@ function init() {
   initStars();
   initNeuralBackground();
   
-  setTimeout(() => document.getElementById('messageInput').focus(), 500);
+  setTimeout(function() {
+    document.getElementById('messageInput').focus();
+  }, 500);
   
   console.log('✨ TYAZA v5.0 - Ultra-Realistic + Puter AI Primary');
   console.log('🏢 KIVURA LABS - "Healthy citizens, wealthy nation"');
